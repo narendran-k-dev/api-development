@@ -1,19 +1,31 @@
 const db = require("../models");
+const { duplicateChecker } = require("../utils/validation/duplicateChecker");
 const Tutorial = db.tutorials;
-
-
-exports.create = (req, res) => {
+duplicateChecker
+exports.create = async (req, res) => {
 
   if (!req.body.title) {
     res.status(400).send({ message: " empty!" });
     return;
   }
+  
+  try {
+    await duplicateChecker(req.body.title);
 
-  const tutorial = new Tutorial({
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false
-  });
+    const tutorial = new Tutorial({
+      title: req.body.title,
+      description: req.body.description,
+      published: req.body.published ? req.body.published : false
+    });
+
+    const data = await tutorial.save();
+    res.send(data);
+
+  } catch (err) {
+    res.status(400).send({
+      message: err.message || "Error occurred while creating the Tutorial."
+    });
+  }
 
   
   tutorial.save(tutorial)

@@ -4,8 +4,8 @@ const Tutorial = db.tutorials;
 duplicateChecker
 exports.create = async (req, res) => {
 
-  if (!req.body.title) {
-    res.status(400).send({ message: " empty!" });
+  if (!req.body.title.trim()) {
+    res.status(400).send({ message: "title cant be mempty!" });
     return;
   }
   

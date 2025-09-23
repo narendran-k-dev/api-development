@@ -4,12 +4,11 @@ const Tutorial = db.tutorials;
 duplicateChecker
 exports.create = async (req, res) => {
 
-  if (!req.body.title.trim()) {
-    res.status(400).send({ message: "title cant be mempty!" });
-    return;
-  }
-  
   try {
+    if (!req.body?.title?.trim()) {
+      res.status(400).send({ message: "title cant be mempty!" });
+      return;
+    }
     await duplicateChecker(req.body.title);
 
     const tutorial = new Tutorial({
@@ -27,7 +26,7 @@ exports.create = async (req, res) => {
     });
   }
 
-  
+
   tutorial.save(tutorial)
     .then(data => {
       res.send(data);
@@ -99,7 +98,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Tutorial.findByIdAndRemove(id, { useFindAndModify: false })
+  Tutorial.findByIdAndDelete(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({

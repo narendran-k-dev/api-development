@@ -4,7 +4,7 @@ exports.duplicateChecker = async (title) => {
   console.log('title ', title)
   const finder = title.trim()
   try {
-    const existing = await Tutorial.findOne({ title:finder }).collation({ locale: 'en', strength: 2 }).exec();
+    const existing = await Tutorial.findOne({ title: finder }).collation({ locale: 'en', strength: 2 }).exec();
     if (existing) {
       throw new Error('Title already exists!');
     }
